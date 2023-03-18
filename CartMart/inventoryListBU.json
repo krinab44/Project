@@ -1,0 +1,191 @@
+[
+ {
+   "itemID": 1,
+   "itemName": "Apple",
+   "itemCategory": "Produce",
+   "itemPrice": 50,
+   "itemQty": 15,
+   "itemDesc": "Red apples, ea",
+   "itemImage": 1
+ },
+ {
+   "itemID": 2,
+   "itemName": "Banana",
+   "itemCategory": "Produce",
+   "itemPrice": 50,
+   "itemQty": 20,
+   "itemDesc": "Banana, ea",
+   "itemImage": 2
+ },
+ {
+   "itemID": 3,
+   "itemName": "Tomato",
+   "itemCategory": "Produce",
+   "itemPrice": 50,
+   "itemQty": 25,
+   "itemDesc": "Vine ripe, ea",
+   "itemImage": 3
+ },
+ {
+   "itemID": 4,
+   "itemName": "Lettuce",
+   "itemCategory": "Produce",
+   "itemPrice": 75,
+   "itemQty": 12,
+   "itemDesc": "Iceberg, head",
+   "itemImage": 4
+ },
+ {
+   "itemID": 5,
+   "itemName": "Chicken",
+   "itemCategory": "Meat",
+   "itemPrice": 500,
+   "itemQty": 15,
+   "itemDesc": "Breasts, lb",
+   "itemImage": 5
+ },
+ {
+   "itemID": 6,
+   "itemName": "Beef",
+   "itemCategory": "Meat",
+   "itemPrice": 400,
+   "itemQty": 14,
+   "itemDesc": "Ground, lb",
+   "itemImage": 6
+ },
+ {
+   "itemID": 7,
+   "itemName": "Pork",
+   "itemCategory": "Meat",
+   "itemPrice": 650,
+   "itemQty": 11,
+   "itemDesc": "Chops, lb",
+   "itemImage": 7
+ },
+ {
+   "itemID": 8,
+   "itemName": "Bread",
+   "itemCategory": "Bakery",
+   "itemPrice": 200,
+   "itemQty": 23,
+   "itemDesc": "Fresh baked, loaf",
+   "itemImage": 8
+ },
+ {
+   "itemID": 9,
+   "itemName": "Cake",
+   "itemCategory": "Bakery",
+   "itemPrice": 700,
+   "itemQty": 8,
+   "itemDesc": "Birthday, 1/4 sheet",
+   "itemImage": 9
+ },
+ {
+   "itemID": 10,
+   "itemName": "Pie",
+   "itemCategory": "Bakery",
+   "itemPrice": 600,
+   "itemQty": 9,
+   "itemDesc": "Cherry",
+   "itemImage": 10
+ },
+ {
+   "itemID": 11,
+   "itemName": "Cereal",
+   "itemCategory": "Dry Grocery",
+   "itemPrice": 225,
+   "itemQty": 24,
+   "itemDesc": "Sugary kid cereal",
+   "itemImage": 11
+ },
+ {
+   "itemID": 12,
+   "itemName": "Soup",
+   "itemCategory": "Dry Grocery",
+   "itemPrice": 100,
+   "itemQty": 28,
+   "itemDesc": "Cart Mart brand",
+   "itemImage": 12
+ },
+ {
+   "itemID": 13,
+   "itemName": "Pasta",
+   "itemCategory": "Dry Grocery",
+   "itemPrice": 125,
+   "itemQty": 17,
+   "itemDesc": "Spaghetti ",
+   "itemImage": 13
+ },
+ {
+   "itemID": 14,
+   "itemName": "Chips",
+   "itemCategory": "Dry Grocery",
+   "itemPrice": 250,
+   "itemQty": 32,
+   "itemDesc": "Potato chips",
+   "itemImage": 14
+ },
+ {
+   "itemID": 15,
+   "itemName": "Ice Cream",
+   "itemCategory": "Frozen",
+   "itemPrice": 350,
+   "itemQty": 19,
+   "itemDesc": "Vanilla",
+   "itemImage": 15
+ },
+ {
+   "itemID": 16,
+   "itemName": "Pizza",
+   "itemCategory": "Frozen",
+   "itemPrice": 675,
+   "itemQty": 27,
+   "itemDesc": "Pepperoni",
+   "itemImage": 16
+ },
+ {
+   "itemID": 17,
+   "itemName": "French Fries",
+   "itemCategory": "Frozen",
+   "itemPrice": 375,
+   "itemQty": 16,
+   "itemDesc": "Shoestring",
+   "itemImage": 17
+ },
+ {
+   "itemID": 18,
+   "itemName": "Waffles",
+   "itemCategory": "Frozen",
+   "itemPrice": 275,
+   "itemQty": 13,
+   "itemDesc": "Frozen waffles",
+   "itemImage": 18
+ },
+ {
+   "itemID": 19,
+   "itemName": "Milk",
+   "itemCategory": "Refrigerated",
+   "itemPrice": 350,
+   "itemQty": 35,
+   "itemDesc": "Milk",
+   "itemImage": 19
+ },
+ {
+   "itemID": 20,
+   "itemName": "Butter",
+   "itemCategory": "Refrigerated",
+   "itemPrice": 250,
+   "itemQty": 27,
+   "itemDesc": "Salted",
+   "itemImage": 20
+ },
+ {
+   "itemID": 21,
+   "itemName": "Eggs",
+   "itemCategory": "Refrigerated",
+   "itemPrice": 375,
+   "itemQty": 28,
+   "itemDesc": "Cage free",
+   "itemImage": 21
+ }
+]

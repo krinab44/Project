@@ -1,227 +1,241 @@
+/*
+* File: main.cpp
+* Name: Krina Bhagat
+* Assigment 4: Hash Table
+* Purpose: making a hash table
+* This program is entirely my own work
+*/
 #include <iostream>
+#include <fstream>
+#include <stdlib.h>
 #include <math.h>
-#include <iomanip>
+#include <conio.h>
+#include <string.h>
+#define TABLESIZE     100
+#define KEYSIZE       4
+#define EMPTYKEY      "----"
+#define DATAFILE      "P4DATA.TXT"
+
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning (disable: 4996)
+
+
 using namespace std;
-//functions
-double log2n(double comp_timex,double y, double  x);
-double n(double x, double y);
-double nlogn(double comp_timex,double y, double x);
-double n_squared(double x, double y);
-double n_cubed(double x, double y);
-double factorial(double x, double y);
-double two_raised(double x, double y);
-double conversion_time(double n);
-string time_measurement (double n);
-int main (void)
+// Define the structure for use in the hash table
+struct HashStruct
 {
-    double comp_time;
-    int low;
-    int medium;
-    int high;
-    double answer;
-    double result;
-    int conversion;
-    cout << "please enter a time in seconds" << endl;
-    cin >> comp_time;
-    cout << "Please enter a low" << endl;
-    cin >> low;
-    cout << "Please enter a medium" << endl;
-    cin >> medium;
-    cout << "Please enter a high" << endl;
-    cin >> high;
-    cout << endl;
+    char key[5];
+    int data;
+};
+
+void InitTable(HashStruct hashT[], int TableSize);
+int HashInsert(HashStruct T[], char* key, int data, int hNum, int dhNum);
+int Hash_1(char* key);
+int ProbeDec_1(char* key);
+int Hash_2(char* key);
+int ProbeDec_2(char* key);
+int Hash_3(char* key);
+int ProbeDec_3(char* key);
+
+int main(void)
+{
+    /* --- Snippet 1: Partial list of variables defined in main() --- */
+    int          i, hashNum, dHashNum, count;
+    ifstream* inFile;
+    HashStruct   T[100];  // Hash table srray of 100 data structures
+    char         line[64];// Array to hold lines read from file
+    char         key[5];  // Array to hold 4-character keys
+    int          data;    // Integer data
     
-    //start of calculations
-    double logn = log2n(comp_time,low, 2);
-    double var_n = n(comp_time, low);
-    double n_times_logn = nlogn(comp_time,low,2);
-    double nsqaured = n_squared(comp_time, low);
-    double ncubed = n_cubed(comp_time, low);
-    double fact = factorial(comp_time,low);
-    double tworaise = two_raised(comp_time, low);
+
+ /* --- Snippet 2: The following code can be used to perform the 9 tests. Use
+                        hashNum to increment a loop for each of 3 hash functions and
+                        dHashNum to increment a nested loop for each of 3 double
+                        hash functions. --- */
+
+                        // For each of three hash functions
+    for (hashNum = 0; hashNum < 3; hashNum++)
+    {
+        // For each of three double hash functions
+        for (dHashNum = 0; dHashNum < 3; dHashNum++)
+        {
+
+            InitTable(T, TABLESIZE);               // Call function to initialize table to empty
+            inFile = new ifstream();
+            inFile->open(DATAFILE, ifstream::in);   // Open data file for this test; changed to datafile bc no filename
+            if (!inFile->is_open())
+            {
+                cout << "Unable to open data file. Program terminating\n";
+                return 0;
+            }
+
+            count = 0;     // Initialize collision counter
+            for (int i = 0; i < 50; i++)
+            {
+                inFile->getline(line, 64, '\n');
+                sscanf(line, "%s %d", key, &data);
+                count += HashInsert(T, key, data, hashNum, dHashNum);
+                // Note: The HashInsert() function uses the indices of hashNum and
+                // dHashNum to know which hash function and double hash function to call
+                // in this test.
+                //cout << "Testing hash function " << hashNum << " using double hash " << dHashNum << ".\n";
+                //cout << "Total collisions =" << count << ".\n";
+            }
+            inFile->close();		/* Close the text file */
+            delete inFile;
+            //}
+
+
+            //==============================================================================
+             /* --- Snippet 3: This code shows how to create a diagram of the results of a single
+                test using one hash function and one double hash function.  The resulting
+                diagram looks similar to the sample below with '|' representing a slot where
+                a key hashed or double hashed to and '-' representing an empty slot:
+                ||-||||---|||-|-||||||||-----||-|-||---||||--|-|||...etc.  --- */
+            cout << "Testing hash function " << hashNum << " using double hash " << dHashNum << ".\n";
+            cout << "Total collisions =" << count << ".\n";
+            // Show the form of the array
+            for (int i = 0; i < 100; i++)
+            {
+                if (strcmp(T[i].key, EMPTYKEY)) // strcmp gives a non-zero (true) result if Key is NOT the EMPTYKEY
+                    cout << "|";     // Indicate an entry at this location
+                else
+                    cout << "-";     // Indicate no entry at this location
+            }
+            cout << "\n\n";
+        }
     
-    double logn2 = log2n(comp_time,medium, 2);
-    double var_n2 = n(comp_time, medium);
-    double n_times_logn2 = nlogn(comp_time,medium,2);
-    double nsqaured2 = n_squared(comp_time, medium);
-    double ncubed2 = n_cubed(comp_time, medium);
-    double fact2 = factorial(comp_time,medium);
-    double tworaise2 = two_raised(comp_time, medium);
-    
-    double logn3 = log2n(comp_time,high, 2);
-    double var_n3 = n(comp_time, high);
-    double n_times_logn3 = nlogn(comp_time,high,2);
-    double nsqaured3 = n_squared(comp_time, high);
-    double ncubed3 = n_cubed(comp_time, high);
-    double fact3 = factorial(comp_time,high);
-    double tworaise3 = two_raised(comp_time, high);
-    
-    //start of table
-    cout << right;
-    cout << fixed << setprecision(6);
-cout <<
-    setw(25) << "Low = " << low << setw(28) << "Medium = " << medium << 
-setw(28) << "High = " << high << '\n' <<
-        setw(10) << "Log(n)" << setw(15) << conversion_time(logn) << " " << 
-time_measurement(logn) << setw(25) << conversion_time(logn2) << " " << 
-time_measurement(logn2) << setw(25) << conversion_time(logn3) << " " << 
-time_measurement(logn3) << endl <<
-        setw(10) << "n" << setw(15) << conversion_time(var_n) << " " << 
-time_measurement(var_n) << setw(25) << conversion_time(var_n2) << " " << 
-time_measurement(var_n2) << setw(25) << conversion_time(var_n3) << " " << 
-time_measurement(var_n3) << endl <<
-        setw(10) << "Nlog(n)" << setw(15) << conversion_time(n_times_logn) << " " 
-<< time_measurement(n_times_logn) << setw(25) << conversion_time(n_times_logn2) << 
-" " << time_measurement(n_times_logn2) << setw(25) << 
-conversion_time(n_times_logn3) << " " << time_measurement(n_times_logn3) << endl <<
-        setw(10) << "n^2" << setw(15) << conversion_time(nsqaured) << " " << 
-time_measurement(nsqaured) << setw(25) << conversion_time(nsqaured2) << " " << 
-time_measurement(nsqaured2) << setw(25) << conversion_time(nsqaured3) << " " << 
-time_measurement(nsqaured3) << endl <<
-        setw(10) << "n^3" << setw(15) << conversion_time(ncubed) << " " << 
-time_measurement(ncubed) << setw(25) << conversion_time(ncubed2) << " " << 
-time_measurement(ncubed2) << setw(25) << conversion_time(ncubed3) << " " << 
-time_measurement(ncubed3) << endl <<
-        setw(10) << "n!" << setw(15) << conversion_time(fact) << " " << 
-time_measurement(fact) << setw(25) << conversion_time(fact2) << " " << 
-time_measurement(fact2) << setw(25) << conversion_time(fact3) << " " << 
-time_measurement(fact3) << endl <<
-        setw(10) << "2^n" << setw(15) << conversion_time(tworaise) << " " << 
-time_measurement(tworaise) << setw(25) << conversion_time(tworaise2) << " " << 
-time_measurement(tworaise2) << setw(25) << conversion_time(tworaise3) << " " << 
-time_measurement(tworaise3) << endl;
-}
-//start of functions
-double log2n(double comp_timex,double y, double  x)
-{
-    //x = 2;
-    double answer= log(y) / log(x);
-    return comp_timex*answer;
-}
-double n(double x, double y)
-{
-    double answer = x * y;
-    return answer;
-}
-double nlogn(double comp_timex,double y, double x)
-{
-    //x = 2;
-    double answer= (log(y) / log(x)) * y;
-    return comp_timex*answer;
-}
-double n_squared(double x, double y)
-{
-    double answer = x * (y*y);
-    return answer;
-}
-double n_cubed(double x, double y)
-{
-    double answer = x * (y*y*y);
-    return answer;
-}
-double factorial(double x, double y)
-{
-   int counter;
-   long fact = 1;
-    for (int counter = 1; counter <= y; counter++) 
-    {
-        fact = fact * counter;
-    }
-    double answer = fact * x;
-    return answer;
-}
-double two_raised(double x, double y)
-{
-    double result = pow(2,y);
-    double answer = result * x;
-    return answer;
-}
-double conversion_time(double n)
-{
-    if (n < 60 && n >= 0)
-    {
-        double secs = n;
-        return secs;
-        
-    }
-    else if (n >= 60 && n < 3600)
-    {
-        double mins = n/60;
-        return mins;
-    }
-    else if(n >= 3600 && n < 86400)
-    {
-        double hours = n/3600;
-        return hours;
-    }
-    else if(n >= 86400 && n < 31536000)
-    {
-        double days = n/86400;
-        return days;
-    }
-    else if(n >= 31536000 && n < 3153600000)
-    {
-        double years = n/31536000;
-        return years;
-    }
-    else if(n >= 3153600000 && n < 3154000000000)
-    {
-        double cent = n/3153600000;
-        return cent;
-    }
-    else
-    {
-        cout << "over 1K cent. " << endl;
-        
     }
 }
-string time_measurement (double n)
-{
-    if (n < 60 )
+
+    //==============================================================================
+      /* --- Snippet 4: Initialize table function --- */
+    void InitTable(HashStruct hashT[], int TableSize)
     {
-        float secs = n;
-        string seconds = "secs";
-        return seconds;
-        
+        int i;
+
+        for (i = 0; i < TableSize; i++)
+        {
+            strcpy(hashT[i].key, EMPTYKEY);
+            hashT[i].data = 0;
+        }
     }
-    else if (n >= 60 && n < 3600)
+
+    //==============================================================================
+    /*--- Snippet 5: Hash Insert function testNum is a number from 0 through 8
+                     indicating which test is being run.  This can be calculated
+                     from hashNum and dHashNum in snippet 2, for example:
+                     testNum = (hashNum * 3) + dHashNum.  --- */
+
+    int HashInsert(HashStruct T[], char* key, int data, int hNum, int dhNum)
     {
-        double mins = n/60;
-        string minutes = "minute";
-        return minutes;
-        
+        int  testNum = (hNum * 3) + dhNum;
+        int  colCount = 0;
+        int  hashIndex, probeDec = 0;
+
+        switch (testNum)
+        {
+        case 0:  // Hash function 1 -- Double hash 1 (linear probing) 
+            hashIndex = Hash_1(key);
+            probeDec = ProbeDec_1(key); // Function just returns 1 
+            break;
+        case 1:  // Hash function 1 -- Double hash 2  
+            hashIndex = Hash_1(key);
+            probeDec = ProbeDec_2(key);
+            break;
+        case 2:  // Hash function 1 -- Double hash 3  
+            hashIndex = Hash_1(key);
+            probeDec = ProbeDec_3(key);
+            break;
+        case 3:  // Hash function 2 -- Double hash 1 (linear probing)  
+            hashIndex = Hash_2(key);
+            probeDec = ProbeDec_1(key); // Function just returns 1
+            break;
+        case 4:  // Hash function 2 -- Double hash 2  
+            hashIndex = Hash_2(key);
+            probeDec = ProbeDec_2(key);
+            break;
+        case 5:  // Hash function 2 -- Double hash 3  
+            hashIndex = Hash_2(key);
+            probeDec = ProbeDec_3(key);
+            break;
+        case 6:  // Hash function 3 -- Double hash 1 (linear probing)  
+            hashIndex = Hash_3(key);
+            probeDec = ProbeDec_1(key); // Function just returns 1
+            break;
+        case 7:  // Hash function 3 -- Double hash 2  
+            hashIndex = Hash_3(key);
+            probeDec = ProbeDec_2(key);
+            break;
+        case 8:  // Hash function 3 -- Double hash 3  
+            hashIndex = Hash_3(key);
+            probeDec = ProbeDec_3(key);
+            break;
+        }
+
+        // Find a place to insert into the table
+        while (strcmp(T[hashIndex].key, EMPTYKEY) != 0)
+        {
+            colCount++;
+            hashIndex -= probeDec;  // Decrementing was chosen you could also choose to
+            if (hashIndex < 0)              //  increment and wrap back to the beginning of the table.
+                hashIndex = hashIndex + TABLESIZE;
+            //break;
+            //cout << "number" << endl;
+        }
+        // Insert key and data into table at index hashIndex
+        // return the collision count
+        strcpy(T[hashIndex].key, key);
+        T[hashIndex].data = data;
+        return colCount++;
     }
-    else if(n >= 3600 && n < 86400)
+
+    int Hash_1(char* key)
     {
-        double hours = n/3600;
-        string hour = "hour";
-        return hour;
-        
+        //based on base 26
+        int index;
+       // index = ((key[0] - 'A' + 25) * pow(26, 3)) + ((key[1] - 'A' + 44) * pow(26, 2)) + ((key[2] - 'A' + 53) * 26) + ((key[3] - 'A' + 32));
+        index = ((key[0] - 'A' + 1) * pow(26, 3)) + ((key[1] - 'A' + 1) * pow(26, 2)) + ((key[2] - 'A' + 1) * 26) + ((key[3] - 'A' + 1));
+        index %= TABLESIZE;
+        return index;
     }
-    else if(n >= 86400 && n < 31536000)
+    int ProbeDec_1(char* key)
     {
-        double days = n/86400;
-        string day = "day";
-        return day;
-        
+        return 1;
     }
-    else if(n >= 31536000 && n < 3153600000)
+    int Hash_2(char* key)
     {
-        double years = n/31536000;
-        string year = "year";
-        return year;
-        
+        //based on folding
+        int index;
+        index = ((key[0] - 'A' + 1) * (key[1] - 'A' + 1)) + ((key[2] - 'A' + 1) * (key[3] - 'A' + 1));
+        index %= TABLESIZE;
+        return index;
     }
-    else if(n >= 3153600000 && n < 3154000000000)
+    int ProbeDec_2(char *key)
     {
-        double cent = n/3153600000;
-        string century = "century";
-        return century;
-        
+        //based on 
+        int index;
+       // index = ((key[0] - 'A') * pow(25, 3)) + ((key[1] - 'A') * pow(25, 2)) + ((key[2] - 'A') * 25) + ((key[3] - 'A'));
+        index = ((key[0]-'A') * 1) + ((key[1]-'A') * 33);
+      // index = pow(((key[1] - 'A' + 50) + (key[2] - 'A' + 50)), 2);;
+        index %=TABLESIZE;
+        return index;
+
     }
-    // else
-    // {
-    //     //cout << "you have exceeded 1000 cent" << endl;
-        
-    // }
-} 
+    int Hash_3(char* key)
+    {
+        //based on middle squaring
+        int index;
+        index = pow(((key[1] - 'A' + 1) + (key[2] - 'A' + 1)), 2);
+        index %= TABLESIZE;
+        return index;
+    }
+    int ProbeDec_3(char* key)
+    {
+        int index;
+        index = (key[0] - 'A' + 127)  + (key[1] - 'A' + 332) + (key[2] - 'A' + 50) + (key[3] - 'A' );
+        //index = pow(((key[1] - 'A' + 1) + (key[2] - 'A' + 1)), 3);
+        //index = ((key[0]-'A') * 50) + ((key[1]-'A') * 51);
+        index %= TABLESIZE;
+        return index;
+    }
